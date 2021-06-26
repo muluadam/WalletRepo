@@ -13,7 +13,7 @@ import com.digital.wallet.models.Customer;
 import com.digital.wallet.repositories.CustomerRepository;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService{
+public class CustomerDetailsService implements UserDetailsService{
 
 	@Autowired
 	private CustomerRepository customerRepository;
@@ -22,6 +22,10 @@ public class CustomUserDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		Customer customer = customerRepository.findByEmail(username);
+		if(customer==null) {
+			throw new UsernameNotFoundException("Customer not found with username: " + username);
+
+		}
 		
 		boolean accountNonExpired = true; 
 		boolean credentialsNonExpired = true; 
