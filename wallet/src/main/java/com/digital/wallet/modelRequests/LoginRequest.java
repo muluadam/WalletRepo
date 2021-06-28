@@ -1,17 +1,17 @@
 package com.digital.wallet.modelRequests;
 
-public class JwtRequest {
+public class LoginRequest {
 	
 	private String username;
 	private String password;
 	
 	//need default constructor for JSON Parsing
-	public JwtRequest()
+	public LoginRequest()
 	{
 		
 	}
 
-	public JwtRequest(String username, String password) {
+	public LoginRequest(String username, String password) {
 		this.setUsername(username);
 		this.setPassword(password);
 	}
