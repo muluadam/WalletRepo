@@ -1,5 +1,7 @@
 package com.digital.wallet.services.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class WalletServiceImpl implements WalletService {
 		Wallet w1 = walletRepo.findById(from).get();
 		Wallet w2 = walletRepo.findById(to).get();
 		if(w1 != null && w2 != null) {
-			Transaction t = new Transaction(amount,w1.getWalletId(),w2.getWalletId(), new Date() );
+			Transaction t = new Transaction(amount,w1.getWalletId(),w2.getWalletId(), LocalDateTime.now() );
 			if(w1.getAmount()<amount) {
 				t.setStatus(Status.FAILED);
 				transactionRepo.save(t);
