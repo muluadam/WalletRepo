@@ -1,12 +1,20 @@
 package com.digital.wallet.repositories;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.digital.wallet.models.Transaction;
 
-public interface TansactionRepository extends CrudRepository<Transaction, Long> {
-//    @Query("SELECT t FROM BankTransaction t WHERE t.transactionId=:transactionId")
-//    Iterable<Transaction> findBankTransactionById(@Param("transactionId") Integer transactionId);
+@Repository
+public interface TansactionRepository extends JpaRepository<Transaction, Long> {
+	
+	//List<Transaction> findByWalletSenderOrWalletReciever(long id);
+	//nativeQuery = true,value =
+   @Query("SELECT t FROM Transaction t WHERE (t.walletReciever=:id AND t.status='SUCCESS') OR t.walletSender=:id ")
+   List<Transaction> findWalletTransactions(@Param("id") long id);
+   
 }

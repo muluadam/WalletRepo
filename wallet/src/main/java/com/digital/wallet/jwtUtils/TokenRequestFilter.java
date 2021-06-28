@@ -37,6 +37,7 @@ public class TokenRequestFilter extends OncePerRequestFilter {
 		String token = null;
 		// JWT Token is in the form "Bearer token". Remove Bearer word and get
 		// only the Token
+
 		if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 			
 			token = requestTokenHeader.substring(7);
@@ -50,10 +51,8 @@ public class TokenRequestFilter extends OncePerRequestFilter {
 		} else {
 			logger.warn("JWT Token does not begin with Bearer String");
 		}
-
 		// Once we get the token validate it.
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			
 
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
@@ -70,7 +69,9 @@ public class TokenRequestFilter extends OncePerRequestFilter {
 				// Spring Security Configurations successfully.
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
+			
 		}
+
 
 		chain.doFilter(request, response);
 	}

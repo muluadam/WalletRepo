@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,36 +32,34 @@ public class Transaction implements Serializable {
 	private long walletSender;
 	private long walletReciever;
 	private Date transactionDate;
+	//@Enumerated(EnumType.STRING)
+	private Status status;
 
-	public Transaction(long transactionId, float amount, Date date) {
+	public Transaction( float amount, long walletSender, long walletReciever, Date date) {
 		super();
-		this.transactionId = transactionId;
 		this.amount = amount;
 		this.transactionDate = date;
-		this.wallets = wallets;
+		this.walletSender = walletSender;
+		this.walletReciever = walletReciever;
+		
 	}
 
-	private Status status;
-	@ManyToMany(mappedBy = "transactions")
-//	@JoinTable(name = "wallet_transactions", joinColumns = {
-//			@JoinColumn(name = "transactionId") }, inverseJoinColumns = { @JoinColumn(name = "walletId") })
-	private List<Wallet> wallets;
+	/*
+	 * @ManyToMany(mappedBy = "transactions") // @JoinTable(name =
+	 * "wallet_transactions", joinColumns = { // @JoinColumn(name = "transactionId")
+	 * }, inverseJoinColumns = { @JoinColumn(name = "walletId") }) private
+	 * List<Wallet> wallets;
+	 */
 
-	public List<Wallet> getWallets() {
-		return wallets;
-	}
+	
 
-	public void setWallets(List<Wallet> wallets) {
-		this.wallets = wallets;
-	}
-
-	public Transaction(float amount, long walletSender, long walletReciever, Date transactionDate, Status status) {
+	public Transaction(float amount, long walletSender, long walletReciever, Date transactionDate,Status status ) {
 		super();
 		this.amount = amount;
 		this.walletSender = walletSender;
 		this.walletReciever = walletReciever;
 		this.transactionDate = transactionDate;
-		this.status = status;
+		this.status=status;
 	}
 
 	public long getTransactionId() {
