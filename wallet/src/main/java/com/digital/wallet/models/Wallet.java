@@ -33,7 +33,7 @@ public class Wallet {
 		this.amount = amount;
 		this.isActive=true;
 		//generate UUID
-		setWalletTag(UUID.randomUUID().toString());
+		setWalletTag(GetRandom.generate(6));
 		
 	}
 
