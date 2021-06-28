@@ -52,7 +52,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			customerRepo.save(c);
 			confirmationTokenService.save(token);
 			
-		return new ResponseEntity<>("Verfication email sent"+token.getToken(), HttpStatus.OK);
+		return new ResponseEntity<>("Verfication email sent "+token.getToken(), HttpStatus.OK);
 
 	}
 

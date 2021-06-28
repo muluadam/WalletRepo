@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.digital.wallet.utils.GetRandom;
+
 
 @Entity
 public class ConfirmationToken {

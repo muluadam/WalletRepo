@@ -11,7 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import com.digital.wallet.utils.GetRandom;
 
 @Entity
 @Table(name = "wallets")
@@ -26,29 +29,25 @@ public class Wallet {
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer walletHolder;
-	
-	private LocalDate dateCreated;
-    private LocalDate dateUpdated;
-	
 
-	
+	@CreationTimestamp
+	private LocalDate dateCreated;
+	@UpdateTimestamp
+	private LocalDate dateUpdated;
+
 	public Wallet(float amount) {
 		super();
 		this.amount = amount;
-		this.isActive=true;
-		//generate UUID
+		this.isActive = true;
+		// generate UUID
 		setWalletTag(GetRandom.generate(6));
-		
+
 	}
 
 	public Wallet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
-	
-
-	
 
 	public long getWalletId() {
 		return id;
@@ -93,6 +92,7 @@ public class Wallet {
 	public String getWalletTag() {
 		return walletTag;
 	}
+
 	public void setWalletTag(String walletTag) {
 		this.walletTag = walletTag;
 	}
