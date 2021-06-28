@@ -40,17 +40,6 @@ public class CustomerController {
 	
 	
 	
-	@GetMapping("/")
-	public String  accueil() {
-		return "Welcome Page";
-	}
-	@GetMapping("/hello")
-	public String  seyHello(Principal p) {
-		if(p==null) return null;
-		return "You are authentivated";
-	}
-	
-	
 	@PostMapping("/login")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
 

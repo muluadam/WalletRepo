@@ -1,5 +1,6 @@
 package com.digital.wallet.models;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.persistence.Entity;
@@ -25,6 +26,9 @@ public class Wallet {
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer walletHolder;
+	
+	private LocalDate dateCreated;
+    private LocalDate dateUpdated;
 	
 
 	

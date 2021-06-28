@@ -1,19 +1,12 @@
 package com.digital.wallet.models;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.digital.wallet.enums.Status;
@@ -31,11 +24,11 @@ public class Transaction implements Serializable {
 	private float amount;
 	private long walletSender;
 	private long walletReciever;
-	private Date transactionDate;
+	private LocalDateTime transactionDate;
 	//@Enumerated(EnumType.STRING)
 	private Status status;
 
-	public Transaction( float amount, long walletSender, long walletReciever, Date date) {
+	public Transaction( float amount, long walletSender, long walletReciever, LocalDateTime date) {
 		super();
 		this.amount = amount;
 		this.transactionDate = date;
@@ -53,7 +46,7 @@ public class Transaction implements Serializable {
 
 	
 
-	public Transaction(float amount, long walletSender, long walletReciever, Date transactionDate,Status status ) {
+	public Transaction(float amount, long walletSender, long walletReciever, LocalDateTime transactionDate,Status status ) {
 		super();
 		this.amount = amount;
 		this.walletSender = walletSender;
@@ -94,11 +87,11 @@ public class Transaction implements Serializable {
 		this.walletReciever = walletReciever;
 	}
 
-	public Date getTransactionDate() {
+	public LocalDateTime getTransactionDate() {
 		return transactionDate;
 	}
 
-	public void setTransactionDate(Date transactionDate) {
+	public void setTransactionDate(LocalDateTime transactionDate) {
 		this.transactionDate = transactionDate;
 	}
 
