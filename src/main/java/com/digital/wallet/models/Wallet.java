@@ -1,43 +1,34 @@
 package com.digital.wallet.models;
 
-import java.time.LocalDate;
-import java.util.UUID;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-
 
 @Entity
 @Table(name = "wallets")
 public class Wallet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	private float amount;
-	private boolean isActive;
-
-	private String walletTag;
+	private long walletId;
+	private double amount;
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer walletHolder;
-	
-	private LocalDate dateCreated;
-    private LocalDate dateUpdated;
-	
 
-	
-	public Wallet(float amount) {
+	public Wallet(long walletId, double amount) {
 		super();
+		this.walletId = walletId;
 		this.amount = amount;
-		this.isActive=true;
-		//generate UUID
-		setWalletTag(GetRandom.generate(6));
 		
 	}
 
@@ -46,23 +37,32 @@ public class Wallet {
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "wallet_transactions", joinColumns = {
+			@JoinColumn(name = "walletId") }, inverseJoinColumns = { @JoinColumn(name = "transactionId") })
+	private List<Transaction> transactions;
 
-	
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
 
 	public long getWalletId() {
-		return id;
+		return walletId;
 	}
 
 	public void setWalletId(long walletId) {
-		this.id = walletId;
+		this.walletId = walletId;
 	}
 
-	public float getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(float amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
@@ -72,29 +72,6 @@ public class Wallet {
 
 	public void setWalletHolder(Customer walletHolder) {
 		this.walletHolder = walletHolder;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
-
-	public String getWalletTag() {
-		return walletTag;
-	}
-	public void setWalletTag(String walletTag) {
-		this.walletTag = walletTag;
 	}
 
 }

@@ -82,7 +82,7 @@ public class ConfirmationToken {
     public ConfirmationToken(LocalDateTime createdAt,
                              LocalDateTime expiresAt,
                              Customer customer) {
-        this.token = UUID.randomUUID().toString();
+        this.token =  GetRandom.generate(6);
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
         this.customer = customer;
