@@ -55,6 +55,25 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return new ResponseEntity<>("Verfication email sent"+token.getToken(), HttpStatus.OK);
 
 	}
+	// The forgot password method
+	public ResponseEntity<String> forgotPassword(ForgotPassWordRequest req){
+		boolean isValidEmail = emailValidator.test(req.getEmail());
+
+		if (!isValidEmail) {
+			return new ResponseEntity<>("invalid email", HttpStatus.BAD_REQUEST);
+		}
+
+		Customer customer = customerRepo.findByEmail(req.getEmail());
+		if ( customer == null) {
+			return new ResponseEntity<>("There is no registered customer with this email, use correct email ",HttpStatus.BAD_REQUEST);
+		} else {
+			String generatedPassword = GetRandom.generate(6);
+			customer.setPassword(generatedPassword);
+
+			//	emailConstructor.send(customer.getFirstName() + " " + customer.getLastName(), customer.getEmail(),"your new Password is : " + generatedPassword);
+			return new ResponseEntity<>("your new Password is : " + generatedPassword ,HttpStatus.OK);
+		}
+	}
 
 	private Customer mapReqToCustomer(RegisterRequest req) {
 		Wallet w = new Wallet(0);
