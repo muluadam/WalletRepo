@@ -26,7 +26,8 @@ public class BanckService {
 		for(BankCard c : CARDS) {
 			if(c.getCardNumber()==card.getCardNumber() )
 				if( c.getCardCSV()==card.getCardCSV())
-					if(c.getExpiryDate().isAfter(LocalDate.now())) 
+					if(c.getExpiryDate().isEqual(card.getExpiryDate()) && c.getExpiryDate().isAfter(LocalDate.now()))
+						
 						return c;
 		}
 		return null;

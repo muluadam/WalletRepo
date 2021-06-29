@@ -23,6 +23,7 @@ import com.digital.wallet.modelRequests.CardInfo;
 import com.digital.wallet.modelRequests.LoginRequest;
 import com.digital.wallet.modelResponses.JwtResponse;
 import com.digital.wallet.models.Customer;
+import com.digital.wallet.models.Wallet;
 import com.digital.wallet.services.CardService;
 import com.digital.wallet.services.CustomerService;
 
@@ -48,7 +49,7 @@ public class CustomerController {
 	@GetMapping("/welcom")
 	public ResponseEntity<?> getTransactions( Principal p){
 		if(p==null) return new ResponseEntity<>("error user not found",HttpStatus.BAD_REQUEST);
-		Customer c = customerService.findByEmail(p.getName());
+		Customer c = customerService.findByEmail(p.getName());		
 		return new ResponseEntity<>(c.getWallets(),HttpStatus.OK);
 		
 	}
@@ -81,17 +82,17 @@ public class CustomerController {
 		return null;
 	}
 	
-	@PostMapping("/add/card")
-	public ResponseEntity<String> addCard(@RequestBody CardInfo card, Principal user){
-		if(user==null) return new ResponseEntity<>("error user not found ",HttpStatus.BAD_REQUEST);
-		System.out.println("adding card for "+user.getName());
-		String userEmail = user.getName();
-		Customer customer = customerService.findByEmail(userEmail);
-		if(customer == null) 
-			return new ResponseEntity<>("error customer not found",HttpStatus.BAD_REQUEST);
-		
-		return cardService.chackAndAddCard(card,customer);
-	}
+//	@PostMapping("/add/card")
+//	public ResponseEntity<String> addCard(@RequestBody CardInfo card, Principal user){
+//		if(user==null) return new ResponseEntity<>("error user not found ",HttpStatus.BAD_REQUEST);
+//		System.out.println("adding card for "+user.getName());
+//		String userEmail = user.getName();
+//		Customer customer = customerService.findByEmail(userEmail);
+//		if(customer == null) 
+//			return new ResponseEntity<>("error customer not found",HttpStatus.BAD_REQUEST);
+//		
+//		return cardService.chackAndAddCard(card,customer);
+//	}
 	
 	
 	

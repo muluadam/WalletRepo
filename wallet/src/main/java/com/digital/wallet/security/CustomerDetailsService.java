@@ -21,7 +21,7 @@ public class CustomerDetailsService implements UserDetailsService{
 		
 		Customer customer = customerRepository.findByEmail(username);
 		if(customer==null) {
-			throw new UsernameNotFoundException("Customer not found with email: " + username);
+			System.out.println("Customer not found with email: " + username);
 		}
 		
 //		boolean accountNonExpired = true; 

@@ -40,13 +40,18 @@ public class WalletServiceImpl implements WalletService {
 	private CardService cardService;
 
 	@Override
-	public ResponseEntity<String> transferAmount(long from, long toTag, float amount, String userEmail) {
-		Wallet w2 = walletRepo.findByWalletTag(toTag);
+	public ResponseEntity<String> transferAmount(long from, String toTag, float amount, String userEmail) {
+
+		Wallet w2 = walletRepo.findByTag(toTag);
 
 		if (w2 == null)
 			return error("Wallet Tag : " + toTag + " not found");
-		if (checkCustomerHasWallet(from, userEmail)==null)
-			return error("Wrong Wallet Id");
+
+		if (w2.getWalletId() == from)
+			return error("You cant transfer Money to your wallet");
+
+		if (checkCustomerHasWallet(from, userEmail) == null)
+			return error("Not your wallet");
 		Wallet w1 = walletRepo.findById(from);
 
 		if (w1 != null) {
@@ -71,26 +76,28 @@ public class WalletServiceImpl implements WalletService {
 	@Override
 	public ResponseEntity<?> findWalletTransactions(long walletId, String email) {
 
-		if (checkCustomerHasWallet(walletId, email)==null)
-			return error("you are Trying to access wrong wallet id :"+walletId);
-		
+		if (checkCustomerHasWallet(walletId, email) == null)
+			return error("you are Trying to access wrong wallet id :" + walletId);
+
 		return new ResponseEntity<>(transactionRepo.findWalletTransactions(walletId), HttpStatus.OK);
 	}
 
 	private Customer checkCustomerHasWallet(long walletId, String email) {
 		Customer c = customerService.findByEmail(email);
-		if(c != null) {
-		boolean hisWallet = false;
-		for (Wallet w : c.getWallets()) {
-			if (w.getWalletId() != walletId)
-				hisWallet = false;
-			else {
-				hisWallet = true;
-				break;
+		if (c != null) {
+			boolean hisWallet = false;
+			for (Wallet w : c.getWallets()) {
+				if (w.getWalletId() != walletId)
+					hisWallet = false;
+				else {
+					hisWallet = true;
+					break;
+				}
 			}
-			}
-		if(hisWallet) return c;
-		else return null;
+			if (hisWallet)
+				return c;
+			else
+				return null;
 		}
 		return c;
 	}
@@ -98,7 +105,7 @@ public class WalletServiceImpl implements WalletService {
 	@Override
 	public ResponseEntity<String> topUpMoney(long walletId, CardInfo cardInfo, float amount, String email) {
 		Customer customer = checkCustomerHasWallet(walletId, email);
-		if (customer==null)
+		if (customer == null)
 			return error("Wrong wallet Id ");
 
 		String date = cardInfo.getExpareDate() + "-01";

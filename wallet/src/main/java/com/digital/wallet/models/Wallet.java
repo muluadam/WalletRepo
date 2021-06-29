@@ -27,7 +27,7 @@ public class Wallet {
 	private float amount;
 	private boolean isActive;
 
-	private String walletTag;
+	private String tag;
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	@JsonIgnore
@@ -43,7 +43,7 @@ public class Wallet {
 		this.amount = amount;
 		this.isActive = true;
 		// generate UUID
-		setWalletTag(GetRandom.generate(6));
+		setTag(GetRandom.generate(6));
 
 	}
 
@@ -76,13 +76,7 @@ public class Wallet {
 		this.walletHolder = walletHolder;
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
+	
 
 	public boolean isActive() {
 		return isActive;
@@ -92,12 +86,14 @@ public class Wallet {
 		this.isActive = isActive;
 	}
 
-	public String getWalletTag() {
-		return walletTag;
+	public String getTag() {
+		return tag;
 	}
 
-	public void setWalletTag(String walletTag) {
-		this.walletTag = walletTag;
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
+
+	
 
 }

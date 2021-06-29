@@ -1,6 +1,8 @@
 package com.digital.wallet.repositories;
 
 import com.digital.wallet.models.Wallet;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,7 +11,8 @@ public interface WalletRepository extends CrudRepository<Wallet, Long> {
 
 	Wallet findById(long to);
 
-	Wallet findByWalletTag(long tag);
+	
+	Wallet findByTag(String toTag);
 	
 //    @Query("SELECT w FROM Wallet  w WHERE w.walletId=:walletId")
 //    Iterable<Wallet> findWalletById(@Param("walletId") Integer walletId);
