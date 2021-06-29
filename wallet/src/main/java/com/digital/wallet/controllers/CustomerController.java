@@ -47,7 +47,7 @@ public class CustomerController {
 	@GetMapping("/hello")
 	public String  seyHello(Principal p) {
 		if(p==null) return null;
-		return "You are authentivated";
+		return "You are authenticated";
 	}
 	
 	
@@ -64,6 +64,10 @@ public class CustomerController {
 
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
+	@PostMapping("/forgotPassword")
+	public ResponseEntity<String> forgotPassword(@RequestBody ForgotPassWordRequest req){
+		return registrationService.forgotPassword(req);
+	}
 
 	private ResponseEntity<String> authenticate(String username, String password) throws Exception {
 		try {
@@ -74,7 +78,7 @@ public class CustomerController {
 			return new ResponseEntity<>("Please confirm your registration",HttpStatus.BAD_REQUEST);
 			
 		} catch (BadCredentialsException e) {
-			return new ResponseEntity<>("Bad credantials",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Bad credentials",HttpStatus.BAD_REQUEST);
 		} 
 		return null;
 	}
