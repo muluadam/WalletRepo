@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.digital.wallet.models.Customer;
 import com.digital.wallet.models.Transaction;
@@ -27,7 +28,8 @@ public class WalletApplication implements ApplicationRunner {
 	private final WalletRepository walletRepo;
 	private final TansactionRepository transactionRepo;
 	
-//	@Autowired
+	@Autowired
+	private PasswordEncoder encoder;
 //    private JavaMailSender javaMailSender;
 
 	public WalletApplication(CustomerRepository customerRepository, WalletRepository walletRepo,
@@ -47,13 +49,20 @@ public class WalletApplication implements ApplicationRunner {
 		// TODO Auto-generated method stub
 		System.out.println("Init Customers .....");
 		
-		Wallet w1 = new Wallet( 100f);
-		
+		/*
+		 * Wallet w1 = new Wallet( 100f); Wallet w2 = new Wallet( 100f);
+		 * 
+		 * 
+		 * Customer c1 = new Customer( "Jean", "KD", "devmedk@gmail.com",
+		 * encoder.encode("1234"), Arrays.asList(w1)); Customer c2 = new Customer(
+		 * "Alehegn", "KJL", "amdagachew@gmail.com", encoder.encode("1234"),
+		 * Arrays.asList(w2)); c1.setEnabled(true); c2.setEnabled(true);
+		 */
 
-		Customer c1 = new Customer( "Jean", "KD", "devme@gmail.com", "1234", Arrays.asList(w1));
-
-		w1.setWalletHolder(c1);
-		customerRepository.save(c1);
+		/*
+		 * w1.setWalletHolder(c1); w2.setWalletHolder(c2); customerRepository.save(c1);
+		 * customerRepository.save(c2);
+		 */
 		
 		System.out.println("Sending Email...");
 

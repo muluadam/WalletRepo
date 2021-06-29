@@ -40,6 +40,7 @@ public class CustomerController {
 	
 	
 	
+
 	@GetMapping("/")
 	public String  accueil() {
 		return "Welcome Page";
@@ -51,6 +52,7 @@ public class CustomerController {
 	}
 	
 	
+
 	@PostMapping("/login")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
 

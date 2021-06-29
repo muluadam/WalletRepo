@@ -46,14 +46,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		Customer c = mapReqToCustomer(req);
 		ConfirmationToken token = new ConfirmationToken(LocalDateTime.now(), LocalDateTime.now().plusHours(10L), c);
-		String link = "http://localhost:9090/registration/confirm?token=" + token.getToken();
 		
-			//emailConstructor.send(c.getLastName() +" "+ c.getFirstName(), c.getEmail(), link);
+			//emailConstructor.send(c.getLastName() +" "+ c.getFirstName(), c.getEmail(), token.getToken());
 	
 			customerRepo.save(c);
 			confirmationTokenService.save(token);
 			
-		return new ResponseEntity<>("Verfication email sent "+link, HttpStatus.OK);
+		return new ResponseEntity<>("Verfication email sent"+token.getToken(), HttpStatus.OK);
 
 	}
 	// The forgot password method

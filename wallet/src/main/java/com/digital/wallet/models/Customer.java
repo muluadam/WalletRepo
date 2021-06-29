@@ -1,10 +1,13 @@
 package com.digital.wallet.models;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,6 +57,7 @@ public class Customer implements UserDetails {
     private String lastName;
     private String email;
     private String password;
+
     private int customerPin;
     private Boolean locked = false;
     private Boolean enabled = false;
@@ -140,6 +146,114 @@ public class Customer implements UserDetails {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+	private int pin;
+    public LocalDate getDateCreated() {
+		return dateCreated;
+	}
+
+
+
+	public void setDateCreated(LocalDate dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+
+
+	public LocalDate getDateUpdated() {
+		return dateUpdated;
+	}
+
+
+
+	public void setDateUpdated(LocalDate dateUpdated) {
+		this.dateUpdated = dateUpdated;
+	}
+
+	private Boolean locked = false;
+    private Boolean enabled = false;
+    @CreationTimestamp
+    private LocalDate dateCreated;
+    @UpdateTimestamp
+    private LocalDate dateUpdated;
+    
+	public Long getId() {
+		return id;
+	}
+
+	public List<Wallet> getWallets() {
+		return wallets;
+	}
+
+	public void setWallets(List<Wallet> wallets) {
+		this.wallets = wallets;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public int getCustomerPin() {
+		return pin;
+	}
+
+	public void setCustomerPin(int customerPin) {
+		this.pin = customerPin;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		 SimpleGrantedAuthority authority =
+	                new SimpleGrantedAuthority("USER");
+		 
+	     return Collections.singletonList(authority);
+	
+	}
+	 @Override
+	    public String getPassword() {
+	        return password;
+	    }
+
+	    @Override
+	    public String getUsername() {
+	        return email;
+	    }
+
+	    public String getFirstName() {
+	        return firstName;
+	    }
+
+	    public String getLastName() {
+	        return lastName;
+	    }
+
+	    @Override
+	    public boolean isAccountNonExpired() {
+	        return true;
+	    }
+
+	    @Override
+	    public boolean isAccountNonLocked() {
+	        return !locked;
+	    }
+
+	    @Override
+	    public boolean isCredentialsNonExpired() {
+	        return true;
+	    }
+
+	    @Override
+	    public boolean isEnabled() {
+	        return enabled;
+	    }
+	    public void setEnabled(boolean enabled) {
+	         this.enabled=enabled;
+	    }
 
 
 }
