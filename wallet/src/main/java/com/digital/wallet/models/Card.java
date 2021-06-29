@@ -6,40 +6,47 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
-public class Card {
+@Table(name = "cards")
+public class Card{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	
 	private long id;
 	private long cardNumber;
 	private int cardCSV;
 	private LocalDate expiryDate;
+	@OneToOne
+	@JoinColumn(name = "customer_id", nullable = false)
+	@JsonIgnore
+	private Customer cardHolder;
 	
 	
+
 	public Card(long cardNumber, int cardCSV, LocalDate expiryDate) {
-		super();
+		
 		this.cardNumber = cardNumber;
 		this.cardCSV = cardCSV;
 		this.expiryDate = expiryDate;
 	}
 	
+	
 	public Card() {
-		super();
 		// TODO Auto-generated constructor stub
 	}
+
+
 	public LocalDate getExpiryDate() {
 		return expiryDate;
 	}
 	public void setExpiryDate(LocalDate expiryDate) {
 		this.expiryDate = expiryDate;
 	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+	
 	public long getCardNumber() {
 		return cardNumber;
 	}
@@ -52,6 +59,27 @@ public class Card {
 	public void setCardCSV(int cardCSV) {
 		this.cardCSV = cardCSV;
 	}
+	
+	
+	
+	
+	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	public Customer getCardHolder() {
+		return cardHolder;
+	}
+
+	public void setCardHolder(Customer cardHolder) {
+		this.cardHolder = cardHolder;
+	}
+	
+	
 	
 
 }

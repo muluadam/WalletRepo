@@ -49,10 +49,11 @@ public class WalletApplication implements ApplicationRunner {
 		// TODO Auto-generated method stub
 		System.out.println("Init Customers .....");
 		
-		/*
-		 * Wallet w1 = new Wallet( 100f); Wallet w2 = new Wallet( 100f);
-		 * 
-		 * 
+	
+		  Wallet w1 = new Wallet( 100f); 
+		  walletRepo.save(w1);
+		  
+			/* 
 		 * Customer c1 = new Customer( "Jean", "KD", "devmedk@gmail.com",
 		 * encoder.encode("1234"), Arrays.asList(w1)); Customer c2 = new Customer(
 		 * "Alehegn", "KJL", "amdagachew@gmail.com", encoder.encode("1234"),
@@ -64,32 +65,8 @@ public class WalletApplication implements ApplicationRunner {
 		 * customerRepository.save(c2);
 		 */
 		
-		System.out.println("Sending Email...");
-
-        try {
-        
-            sendEmail();
-            //sendEmailWithAttachment();
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Done");
 	}
 	
-	 void sendEmail() throws MessagingException, IOException {
-
-	        SimpleMailMessage msg = new SimpleMailMessage();
-	        msg.setTo("devmedk@gmail.com");
-
-	        msg.setSubject("Testing from Spring Boot");
-	        msg.setText("Hello World \n Spring Boot Email");
-
-	       // javaMailSender.send(msg);
-
-	    }
+	
 
 }

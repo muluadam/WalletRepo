@@ -34,15 +34,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private EmailConstructor emailConstructor;
 
 	public ResponseEntity<String> register(RegisterRequest req) {
-		// TODO Auto-generated method stub
+	
 		boolean isValidEmail = emailValidator.test(req.getEmail());
-
 		if (!isValidEmail) {
 			return new ResponseEntity<>("invalide email", HttpStatus.BAD_REQUEST);
 		}
 
 		if (customerRepo.findByEmail(req.getEmail()) != null)
-			return new ResponseEntity<>("email exists already", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("email already exists ", HttpStatus.BAD_REQUEST);
 
 		Customer c = mapReqToCustomer(req);
 		ConfirmationToken token = new ConfirmationToken(LocalDateTime.now(), LocalDateTime.now().plusHours(10L), c);

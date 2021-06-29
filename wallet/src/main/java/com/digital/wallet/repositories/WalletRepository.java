@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WalletRepository extends CrudRepository<Wallet, Long> {
 
-	Wallet findByWalletTag(String from);
+	Wallet findById(long to);
+
+	Wallet findByWalletTag(long tag);
 	
 //    @Query("SELECT w FROM Wallet  w WHERE w.walletId=:walletId")
 //    Iterable<Wallet> findWalletById(@Param("walletId") Integer walletId);

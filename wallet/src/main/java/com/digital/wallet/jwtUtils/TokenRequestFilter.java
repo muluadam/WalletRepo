@@ -32,7 +32,6 @@ public class TokenRequestFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		final String requestTokenHeader = request.getHeader("Authorization");
-		System.out.println(requestTokenHeader);
 		String username = null;
 		String token = null;
 		// JWT Token is in the form "Bearer token". Remove Bearer word and get
@@ -47,6 +46,7 @@ public class TokenRequestFilter extends OncePerRequestFilter {
 				System.out.println("Unable to get JWT Token");
 			} catch (ExpiredJwtException e) {
 				System.out.println("JWT Token has expired");
+				
 			}
 		} else {
 			logger.warn("JWT Token does not begin with Bearer String");

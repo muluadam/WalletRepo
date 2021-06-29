@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.digital.wallet.utils.GetRandom;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "wallets")
@@ -26,8 +28,9 @@ public class Wallet {
 	private boolean isActive;
 
 	private String walletTag;
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
+	@JsonIgnore
 	private Customer walletHolder;
 
 	@CreationTimestamp
