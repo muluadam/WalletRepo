@@ -28,12 +28,12 @@ public class CustomerServiceImpl implements CustomerService {
 		return customerRepo.findByEmail(email);
 	}
 
-	@Override
-	public ResponseEntity<?> getCards(String email) {
-
-		Customer customer = customerRepo.findByEmail(email);
-		return cardService.getCards(customer);
-	}
+	/*
+	 * @Override public ResponseEntity<?> getCards(String email) {
+	 * 
+	 * Customer customer = customerRepo.findByEmail(email); return
+	 * cardService.getCards(customer); }
+	 */
 
 	@Override
 	public ResponseEntity<String> chackAndAddCard(CardInfo card, String email) {
@@ -43,6 +43,8 @@ public class CustomerServiceImpl implements CustomerService {
 			return new ResponseEntity<>("error customer not found",HttpStatus.BAD_REQUEST);		
 		return cardService.chackAndAddCard(card, customer);
 	}
+
+	
 
 	
 

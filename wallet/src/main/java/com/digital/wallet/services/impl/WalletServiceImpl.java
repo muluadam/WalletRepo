@@ -56,7 +56,8 @@ public class WalletServiceImpl implements WalletService {
 		Wallet wSender = walletRepo.findById(from);
 
 		if (wSender != null) {
-			Transaction t = new Transaction(amount,wSender.getWalletId(), wReciever.getWalletId(), LocalDateTime.now());
+			Transaction t = new Transaction(amount, wSender.getWalletId(), wReciever.getWalletId(),
+					LocalDateTime.now());
 			if (wSender.getAmount() < amount) {
 				t.setStatus(Status.FAILED);
 				transactionRepo.save(t);
@@ -103,46 +104,60 @@ public class WalletServiceImpl implements WalletService {
 		return c;
 	}
 
-	@Override
-	public ResponseEntity<String> topUpMoney(long walletId, CardInfo cardInfo, float amount, String email) {
-		Customer customer = checkCustomerHasWallet(walletId, email);
-		if (customer == null)
-			return error("Wrong wallet Id ");
-
-		String date = cardInfo.getExpareDate() + "-01";
-		LocalDate d = null;
-		try {
-			d = LocalDate.parse(date);
-		} catch (DateTimeParseException e) {
-			// Throw invalid date message
-			return error("invalide expary date for your card");
-
-		}
-		Card card = new Card(cardInfo.getCardNumber(), cardInfo.getCsv(), d);
-		Card isCardExist = cardService.findByCardNumber(cardInfo.getCardNumber());
-	
-		card.setCardHolder(customer);
-		
-		switch (banckService.validAndEnoughMoney(amount, card)) {
-		case -1:
-			if(isCardExist == null) cardService.save(card);
-			return error("Not Enough Money on your card");
-		case 1:
-			Wallet w = walletRepo.findById(walletId);
-			w.setAmount(w.getAmount() + amount);
-			if(isCardExist == null) cardService.save(card);
-			walletRepo.save(w);
-			return new ResponseEntity<>("Your card was debited seccussfly", HttpStatus.OK);
-
-
-		default:
-			return error("Card Invalide");
-		}
-
-	}
+	/*
+	 * @Override public ResponseEntity<String> topUpMoney(long walletId, CardInfo
+	 * cardInfo, float amount, String email) { Customer customer =
+	 * checkCustomerHasWallet(walletId, email); if (customer == null) return
+	 * error("Wrong wallet Id ");
+	 * 
+	 * String date = cardInfo.getExpareDate() + "-01"; LocalDate d = null; try { d =
+	 * LocalDate.parse(date); } catch (DateTimeParseException e) { // Throw invalid
+	 * date message return error("invalide expary date for your card");
+	 * 
+	 * } Card card = new Card(cardInfo.getCardNumber(), cardInfo.getCsv(), d); Card
+	 * isCardExist = cardService.findByCardNumber(cardInfo.getCardNumber());
+	 * 
+	 * card.setCardHolder(customer);
+	 * 
+	 * switch (banckService.validAndEnoughMoney(amount, card)) { case -1:
+	 * if(isCardExist == null) cardService.save(card); return
+	 * error("Not Enough Money on your card"); case 1: Wallet w =
+	 * walletRepo.findById(walletId); w.setAmount(w.getAmount() + amount);
+	 * if(isCardExist == null) cardService.save(card); walletRepo.save(w); return
+	 * new ResponseEntity<>("Your card was debited seccussfly", HttpStatus.OK);
+	 * 
+	 * 
+	 * 
+	 * default: return error("Card Invalide"); }
+	 * 
+	 * }
+	 */
 
 	private ResponseEntity<String> error(String msgError) {
 		return new ResponseEntity<>(msgError, HttpStatus.BAD_REQUEST);
 	}
 
+	@Override
+	public ResponseEntity<String> topUpMoney(long walletId,int pin, float amount, String email) {
+		Customer c = customerService.findByEmail(email);
+		if(c.getCustomerPin() != pin)
+			return error("Invalid pin "+pin);
+		Wallet w = c.getWallets().get(0);
+		if (w == null || w.getWalletId() != walletId)
+			return error("Invalid wallet");
+		if(c.getCard()==null)
+			return error("Please add a card");
+		switch (banckService.validAndEnoughMoney(amount, c.getCard())) {
+		case -1:
+			return error("Not Enough Money on your card");
+		case 1:
+			w.setAmount(w.getAmount() + amount);
+			walletRepo.save(w);
+			return new ResponseEntity<>("Your card was debited seccussfly", HttpStatus.OK);
+		default:
+			return error("Card Invalide");
+
+		}
+
+	}
 }

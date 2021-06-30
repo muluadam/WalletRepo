@@ -25,43 +25,52 @@ import com.digital.wallet.services.WalletService;
 public class WalletController {
 	@Autowired
 	private WalletService walletService;
-	
-	
+
 	@PostMapping("transfer")
-	public ResponseEntity<String> transfer(@PathVariable("walletId") long walletId,
-			@RequestParam("to") String to,
-            @RequestParam("amount") float amount, Principal p){
+	public ResponseEntity<String> transfer(@PathVariable("walletId") long walletId, @RequestParam("to") String to,
+			@RequestParam("amount") float amount, Principal p) {
 		System.out.println(to);
-		if(p==null) return error("JWT expired");
-		if( amount == 0) return error("invalide request");
-		return walletService.transferAmount(walletId, to, amount,p.getName());
+		if (p == null)
+			return error("JWT expired");
+		if (amount == 0)
+			return error("invalide request");
+		return walletService.transferAmount(walletId, to, amount, p.getName());
 	}
-	
-	
-
-	
-
-
 
 	@GetMapping("transactions")
-	public ResponseEntity<?> getTransactions(@PathVariable("walletId") long walletId, Principal p){
-		if(p == null) return error("JWT expired");
+	public ResponseEntity<?> getTransactions(@PathVariable("walletId") long walletId, Principal p) {
+		if (p == null)
+			return error("JWT expired");
 		return walletService.findWalletTransactions(walletId, p.getName());
-		
+
 	}
+
+	// add card with amount here
+	/*
+	 * @PostMapping("topUp") public ResponseEntity<String>
+	 * topUp(@PathVariable("walletId") long walletId,@RequestParam("amount") float
+	 * amount,@RequestBody CardInfo card, Principal p){ if(p == null) return
+	 * error("JWT expired"); if( amount == 0) return
+	 * error("invalide amount : "+amount); return walletService.topUpMoney(walletId,
+	 * card, amount,p.getName());
+	 * 
+	 * }
+	 */
+
 	@PostMapping("topUp")
-	public ResponseEntity<String> topUp(@PathVariable("walletId") long walletId,@RequestParam("amount") float amount,@RequestBody CardInfo card, Principal p){
-		if(p == null) return error("JWT expired");
-		if( amount == 0) return error("invalide amount : "+amount);
-		return walletService.topUpMoney(walletId, card, amount,p.getName());
-		
-}
-	
-	private ResponseEntity<String> error(String mesage) {
-		return new ResponseEntity<>(mesage,HttpStatus.BAD_REQUEST);
+	public ResponseEntity<String> topUp(@PathVariable("walletId") long walletId, @RequestParam("amount") float amount,@RequestParam("pin") int pin,
+			Principal p) {
+		if (p == null)
+			return error("JWT expired");
+		if (amount == 0)
+			return error("invalide amount : " + amount);
+
+		return walletService.topUpMoney(walletId, pin, amount, p.getName());
+
 	}
-	
-	
-	
+
+	private ResponseEntity<String> error(String mesage) {
+		return new ResponseEntity<>(mesage, HttpStatus.BAD_REQUEST);
+	}
 
 }

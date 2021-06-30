@@ -93,12 +93,11 @@ public class CustomerController {
 		return customerService.chackAndAddCard(card,p.getName());
 	}
 	
-	@GetMapping("user/cards")
-	public ResponseEntity<?> getCards(Principal p){
-		if(p == null) return error("JWT expired");
-		return customerService.getCards(p.getName());
-	}
-	
+	/*
+	 * @GetMapping("user/cards") public ResponseEntity<?> getCards(Principal p){
+	 * if(p == null) return error("JWT expired"); return
+	 * customerService.getCards(p.getName()); }
+	 */
 	
 	private ResponseEntity<String> error(String message) {
 		// TODO Auto-generated method stub

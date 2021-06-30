@@ -13,6 +13,7 @@ public interface CardRepository extends CrudRepository<Card,Long> {
 	Card findByCardNumber(long cardNumber);
 
 
-	List<Card> findAllByCardHolder(Customer customer);
+	//List<Card> findAllByCardHolder(Customer customer);
+	Card findByCardHolder(Customer customer);
 
 }

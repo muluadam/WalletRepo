@@ -29,13 +29,11 @@ public class CardService {
 		} catch (DateTimeParseException e) {
 			return error("invalide expary date for your card");
 		}
-		
 		Card card = new Card(cardInfo.getCardNumber(), cardInfo.getCsv(), d);
 		if (banckService.findAndCheckValidity(card) != null) {
-			System.out.println("hna avant");
-			System.out.println("hna"+card.getCardNumber());
-			Card cardExist = cardRepo.findByCardNumber(card.getCardNumber());
-			
+
+			Card cardExist = findByCardNumber(card.getCardNumber());
+
 			if (cardExist == null || (cardExist != null && !cardExist.equals(card))) {
 				card.setCardHolder(customer);
 				cardRepo.save(card);
@@ -45,25 +43,32 @@ public class CardService {
 		return error("Card Invalide");
 	}
 
+	public Card findByCardNumber(long cardNumber) {
+		return cardRepo.findByCardNumber(cardNumber);
+	}
+
+	/*
+	 * public ResponseEntity<?> getCards(Customer customer) {
+	 * 
+	 * return new ResponseEntity<>(cardRepo.findAllByCardHolder(customer),
+	 * HttpStatus.OK); }
+	 */
+
+	private ResponseEntity<String> error(String message) {
+		return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+	}
+
 	public void save(Card card) {
 		cardRepo.save(card);
 
 	}
 
-	
-
-	public Card findByCardNumber(long cardNumber) {
-		return cardRepo.findByCardNumber(cardNumber);
+	public int checkAndToUp(Customer c, float amount) {
+		Card card = cardRepo.findByCardHolder(c);
+		 return banckService.validAndEnoughMoney(amount, card);
+		 
 	}
 
-	public ResponseEntity<?> getCards(Customer customer) {
-		
-		return new ResponseEntity<>(cardRepo.findAllByCardHolder(customer), HttpStatus.OK);
-	}
 	
-	
-	private ResponseEntity<String> error(String message) {
-		return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-	}
 
 }
