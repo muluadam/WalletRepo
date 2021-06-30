@@ -18,6 +18,11 @@ public class Card{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private long cardNumber;
+	
+
+
+	
+
 	private int cardCSV;
 	private LocalDate expiryDate;
 	@OneToOne
@@ -77,6 +82,24 @@ public class Card{
 
 	public void setCardHolder(Customer cardHolder) {
 		this.cardHolder = cardHolder;
+	}
+	
+	
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		Card other = (Card) obj;
+		if (cardCSV != other.cardCSV)
+			return false;
+		if (cardNumber != other.cardNumber)
+			return false;
+		if (expiryDate == null) {
+			if (other.expiryDate != null)
+				return false;
+		} else if (!expiryDate.equals(other.expiryDate))
+			return false;
+		return true;
 	}
 	
 	

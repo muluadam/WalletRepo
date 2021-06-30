@@ -1,7 +1,10 @@
 package com.digital.wallet.security;
 
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,24 +23,22 @@ public class CustomerDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		Customer customer = customerRepository.findByEmail(username);
-		if(customer==null) {
-			System.out.println("Customer not found with email: " + username);
+		if(customer != null) {
+			return customer;
 		}
 		
-//		boolean accountNonExpired = true; 
-//		boolean credentialsNonExpired = true; 
-//		boolean accountNonLocked = true;
-//		
-//		UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-//				username, 
-//				customer.getPassword(), 
-//				true, 
-//				accountNonExpired, 
-//				credentialsNonExpired, 
-//				accountNonLocked, 
-//				Arrays.asList(new SimpleGrantedAuthority("USER")));
+
 		
-		return customer;
+		UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+				"", 
+				"", 
+				true, 
+				false, 
+				false, 
+				false, 
+				Arrays.asList(new SimpleGrantedAuthority("USER")));
+		
+		return userDetails;
 	}
 	
 	

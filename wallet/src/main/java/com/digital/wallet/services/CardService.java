@@ -1,6 +1,7 @@
 package com.digital.wallet.services;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,26 +20,50 @@ public class CardService {
 	@Autowired
 	private BanckService banckService;
 
-	
-
 	public ResponseEntity<String> chackAndAddCard(CardInfo cardInfo, Customer customer) {
-		
-		String date =cardInfo.getExpareDate()+"-01";
-		//handle parse error exception here
-		Card card = new Card(cardInfo.getCardNumber(),cardInfo.getCsv(),LocalDate.parse(date));
-		if(banckService.findAndCheckValidity(card) != null) {
-			card.setCardHolder(customer);
-			cardRepo.save(card);
-			return new ResponseEntity<>("Card valide",HttpStatus.OK);
+
+		String date = cardInfo.getExpareDate() + "-01";
+		LocalDate d = null;
+		try {
+			d = LocalDate.parse(date);
+		} catch (DateTimeParseException e) {
+			return error("invalide expary date for your card");
 		}
-		return new ResponseEntity<>("Card Invalide",HttpStatus.BAD_REQUEST);
+		
+		Card card = new Card(cardInfo.getCardNumber(), cardInfo.getCsv(), d);
+		if (banckService.findAndCheckValidity(card) != null) {
+			System.out.println("hna avant");
+			System.out.println("hna"+card.getCardNumber());
+			Card cardExist = cardRepo.findByCardNumber(card.getCardNumber());
+			
+			if (cardExist == null || (cardExist != null && !cardExist.equals(card))) {
+				card.setCardHolder(customer);
+				cardRepo.save(card);
+			}
+			return new ResponseEntity<>("Card added", HttpStatus.OK);
+		}
+		return error("Card Invalide");
 	}
+
 	public void save(Card card) {
 		cardRepo.save(card);
-		
+
 	}
-	
 
 	
+
+	public Card findByCardNumber(long cardNumber) {
+		return cardRepo.findByCardNumber(cardNumber);
+	}
+
+	public ResponseEntity<?> getCards(Customer customer) {
+		
+		return new ResponseEntity<>(cardRepo.findAllByCardHolder(customer), HttpStatus.OK);
+	}
 	
+	
+	private ResponseEntity<String> error(String message) {
+		return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+	}
+
 }

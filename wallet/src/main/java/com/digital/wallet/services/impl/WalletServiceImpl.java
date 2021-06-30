@@ -18,6 +18,7 @@ import com.digital.wallet.models.Card;
 import com.digital.wallet.models.Customer;
 import com.digital.wallet.models.Transaction;
 import com.digital.wallet.models.Wallet;
+import com.digital.wallet.repositories.CardRepository;
 import com.digital.wallet.repositories.TansactionRepository;
 import com.digital.wallet.repositories.WalletRepository;
 import com.digital.wallet.services.BanckService;
@@ -42,32 +43,32 @@ public class WalletServiceImpl implements WalletService {
 	@Override
 	public ResponseEntity<String> transferAmount(long from, String toTag, float amount, String userEmail) {
 
-		Wallet w2 = walletRepo.findByTag(toTag);
+		Wallet wReciever = walletRepo.findByTag(toTag);
 
-		if (w2 == null)
+		if (wReciever == null)
 			return error("Wallet Tag : " + toTag + " not found");
 
-		if (w2.getWalletId() == from)
+		if (wReciever.getWalletId() == from)
 			return error("You cant transfer Money to your wallet");
 
 		if (checkCustomerHasWallet(from, userEmail) == null)
 			return error("Not your wallet");
-		Wallet w1 = walletRepo.findById(from);
+		Wallet wSender = walletRepo.findById(from);
 
-		if (w1 != null) {
-			Transaction t = new Transaction(amount, w1.getWalletId(), w2.getWalletId(), LocalDateTime.now());
-			if (w1.getAmount() < amount) {
+		if (wSender != null) {
+			Transaction t = new Transaction(amount,wSender.getWalletId(), wReciever.getWalletId(), LocalDateTime.now());
+			if (wSender.getAmount() < amount) {
 				t.setStatus(Status.FAILED);
 				transactionRepo.save(t);
 				return error("Not enough money in your wallet");
 			}
 
-			w2.setAmount(w2.getAmount() + amount);
-			w1.setAmount(w1.getAmount() - amount);
+			wReciever.setAmount(wReciever.getAmount() + amount);
+			wSender.setAmount(wSender.getAmount() - amount);
 			t.setStatus(Status.SUCCESS);
 			transactionRepo.save(t);
-			walletRepo.save(w1);
-			walletRepo.save(w2);
+			walletRepo.save(wSender);
+			walletRepo.save(wReciever);
 			return new ResponseEntity<>("Success", HttpStatus.OK);
 		}
 		return error("Wrong WalletId");
@@ -118,21 +119,21 @@ public class WalletServiceImpl implements WalletService {
 
 		}
 		Card card = new Card(cardInfo.getCardNumber(), cardInfo.getCsv(), d);
-
+		Card isCardExist = cardService.findByCardNumber(cardInfo.getCardNumber());
+	
+		card.setCardHolder(customer);
+		
 		switch (banckService.validAndEnoughMoney(amount, card)) {
 		case -1:
-			return error("Invalid Card ");
-
-		case 2:
-			card.setCardHolder(customer);
+			if(isCardExist == null) cardService.save(card);
+			return error("Not Enough Money on your card");
+		case 1:
 			Wallet w = walletRepo.findById(walletId);
 			w.setAmount(w.getAmount() + amount);
-			cardService.save(card);
+			if(isCardExist == null) cardService.save(card);
 			walletRepo.save(w);
 			return new ResponseEntity<>("Your card was debited seccussfly", HttpStatus.OK);
 
-		case -2:
-			return error("Not Enough Money on the card ");
 
 		default:
 			return error("Card Invalide");

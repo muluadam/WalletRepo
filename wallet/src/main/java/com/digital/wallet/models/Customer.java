@@ -48,6 +48,18 @@ public class Customer implements UserDetails {
 	@OneToOne(mappedBy="cardHolder")
 	private Card card;
 
+	public Customer(Long id, String firstName, String lastName, String email, int pin, Card card,
+			List<Wallet> wallets) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.pin = pin;
+		this.card = card;
+		this.wallets = wallets;
+	}
+
 	public Card getCard() {
 		return card;
 	}
