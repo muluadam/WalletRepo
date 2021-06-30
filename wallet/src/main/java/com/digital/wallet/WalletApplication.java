@@ -25,7 +25,7 @@ import com.digital.wallet.repositories.WalletRepository;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableSwagger2
+//@EnableSwagger2
 public class WalletApplication implements ApplicationRunner {
 	private final CustomerRepository customerRepository;
 	private final WalletRepository walletRepo;

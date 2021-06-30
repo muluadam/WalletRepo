@@ -47,15 +47,7 @@ public class CustomerController {
 	private CustomerService customerService;
 
 	
-	@GetMapping("welcom")
-	public ResponseEntity<?> getTransactions( Principal p){
-		if(p==null) return error("JWT expired");
-		Customer c= customerService.findByEmail(p.getName());
-		CustomerResponse newCustomer = new CustomerResponse(c.getId(),c.getFirstName(),c.getLastName(),c.getEmail(),c.getCustomerPin(),c.getDateCreated(),c.getWallets());
-
-		return new ResponseEntity<>(newCustomer,HttpStatus.OK);
-		
-	}
+	
 	
 	
 
@@ -71,6 +63,16 @@ public class CustomerController {
 		final String token = jwtTokenProvider.generateToken(userDetails);
 
 		return ResponseEntity.ok(new JwtResponse(token));
+	}
+	
+	@GetMapping("welcom")
+	public ResponseEntity<?> getTransactions( Principal p){
+		if(p==null) return error("JWT expired");
+		Customer c= customerService.findByEmail(p.getName());
+		CustomerResponse newCustomer = new CustomerResponse(c.getId(),c.getFirstName(),c.getLastName(),c.getEmail(),c.getCustomerPin(),c.getDateCreated(),c.getWallets());
+
+		return new ResponseEntity<>(newCustomer,HttpStatus.OK);
+		
 	}
 
 	private ResponseEntity<String> authenticate(String username, String password) throws Exception {

@@ -20,14 +20,14 @@ import com.digital.wallet.services.WalletService;
 
 @RestController
 //@CrossOrigin
-@RequestMapping("/api/v1/wallet/{walletId}/")
+@RequestMapping("/api/v1/wallet/")
 
 public class WalletController {
 	@Autowired
 	private WalletService walletService;
 
-	@PostMapping("transfer")
-	public ResponseEntity<String> transfer(@PathVariable("walletId") long walletId, @RequestParam("to") String to,
+	@PostMapping("{walletSenderId}/transfer")
+	public ResponseEntity<String> transfer(@PathVariable("walletSenderId") long walletId, @RequestParam("walletRecieverTag") String to,
 			@RequestParam("amount") float amount, Principal p) {
 		System.out.println(to);
 		if (p == null)
@@ -37,7 +37,7 @@ public class WalletController {
 		return walletService.transferAmount(walletId, to, amount, p.getName());
 	}
 
-	@GetMapping("transactions")
+	@GetMapping("{walletId}/transactions")
 	public ResponseEntity<?> getTransactions(@PathVariable("walletId") long walletId, Principal p) {
 		if (p == null)
 			return error("JWT expired");
@@ -57,7 +57,7 @@ public class WalletController {
 	 * }
 	 */
 
-	@PostMapping("topUp")
+	@PostMapping("{walletId}/topUp")
 	public ResponseEntity<String> topUp(@PathVariable("walletId") long walletId, @RequestParam("amount") float amount,@RequestParam("pin") int pin,
 			Principal p) {
 		if (p == null)
