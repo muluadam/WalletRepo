@@ -68,6 +68,7 @@ public class TokenRequestFilter extends OncePerRequestFilter {
 				// that the current user is authenticated. So it passes the
 				// Spring Security Configurations successfully.
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+				System.out.println("enter"+SecurityContextHolder.getContext().getAuthentication().getName());
 			}
 			
 		}

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digital.wallet.modelRequests.CardInfo;
+import com.digital.wallet.modelRequests.TransferMoneyRequest;
 import com.digital.wallet.services.WalletService;
 
 @RestController
@@ -27,14 +28,12 @@ public class WalletController {
 	private WalletService walletService;
 
 	@PostMapping("{walletSenderId}/transfer")
-	public ResponseEntity<String> transfer(@PathVariable("walletSenderId") long walletId, @RequestParam("walletRecieverTag") String to,
-			@RequestParam("amount") float amount, Principal p) {
-		System.out.println(to);
+	public ResponseEntity<String> transfer(@PathVariable("walletSenderId") long walletId, @RequestBody TransferMoneyRequest transfer, Principal p) {
 		if (p == null)
 			return error("JWT expired");
-		if (amount == 0)
-			return error("invalide request");
-		return walletService.transferAmount(walletId, to, amount, p.getName());
+		if (transfer.getAmount() == 0)
+			return error("invalide ammount "+0);
+		return walletService.transferAmount(walletId, transfer, p.getName());
 	}
 
 	@GetMapping("{walletId}/transactions")

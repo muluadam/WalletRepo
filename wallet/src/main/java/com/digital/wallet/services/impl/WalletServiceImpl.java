@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.digital.wallet.enums.Status;
 import com.digital.wallet.modelRequests.CardInfo;
+import com.digital.wallet.modelRequests.TransferMoneyRequest;
 import com.digital.wallet.models.Card;
 import com.digital.wallet.models.Customer;
 import com.digital.wallet.models.Transaction;
@@ -41,10 +42,18 @@ public class WalletServiceImpl implements WalletService {
 	private CardService cardService;
 
 	@Override
-	public ResponseEntity<String> transferAmount(long from, String toTag, float amount, String userEmail) {
-
+	public ResponseEntity<String> transferAmount(long from, TransferMoneyRequest transfer, String userEmail) {
+		long toTag = transfer.getRecieverTag();
+		float amount = transfer.getAmount();
+		String comment = transfer.getComment();
+		int pin = transfer.getPin();
+		System.out.println(userEmail);
+		Customer customer = customerService.findByEmail(userEmail);
+System.out.println(customer.getCustomerPin());
+		if(customer.getCustomerPin() != pin)
+				return error("Invalid pin "+pin);
+		System.out.println("chof hna");
 		Wallet wReciever = walletRepo.findByTag(toTag);
-
 		if (wReciever == null)
 			return error("Wallet Tag : " + toTag + " not found");
 
@@ -56,7 +65,7 @@ public class WalletServiceImpl implements WalletService {
 		Wallet wSender = walletRepo.findById(from);
 
 		if (wSender != null) {
-			Transaction t = new Transaction(amount, wSender.getWalletId(), wReciever.getWalletId(),
+			Transaction t = new Transaction(amount, from, toTag,comment,
 					LocalDateTime.now());
 			if (wSender.getAmount() < amount) {
 				t.setStatus(Status.FAILED);
@@ -160,4 +169,8 @@ public class WalletServiceImpl implements WalletService {
 		}
 
 	}
+
+	
+
+	
 }

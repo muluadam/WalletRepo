@@ -48,7 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+		System.out.println("cconfiguer auth beforre");
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		System.out.println("cconfiguer auth after");
 	}
 
 	@Bean

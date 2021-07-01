@@ -27,7 +27,7 @@ public class Wallet {
 	private float amount;
 	private boolean isActive;
 
-	private String tag;
+	private long tag;
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	@JsonIgnore
@@ -86,13 +86,15 @@ public class Wallet {
 		this.isActive = isActive;
 	}
 
-	public String getTag() {
+	public long getTag() {
 		return tag;
 	}
 
-	public void setTag(String tag) {
+	public void setTag(long tag) {
 		this.tag = tag;
 	}
+
+	
 
 	
 

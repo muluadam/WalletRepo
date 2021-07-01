@@ -24,6 +24,7 @@ public class CustomerDetailsService implements UserDetailsService{
 		
 		Customer customer = customerRepository.findByEmail(username);
 		if(customer != null) {
+			System.out.println("customer is not null");
 			return customer;
 		}
 		
@@ -37,7 +38,8 @@ public class CustomerDetailsService implements UserDetailsService{
 				false, 
 				false, 
 				Arrays.asList(new SimpleGrantedAuthority("USER")));
-		
+
+		System.out.println("customer is  null");
 		return userDetails;
 	}
 	

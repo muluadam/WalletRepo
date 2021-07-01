@@ -25,15 +25,17 @@ public class Transaction implements Serializable {
 	private long walletSender;
 	private long walletReciever;
 	private LocalDateTime transactionDate;
+	private String comment;
 	//@Enumerated(EnumType.STRING)
 	private Status status;
 
-	public Transaction( float amount, long walletSender, long walletReciever, LocalDateTime date) {
+	public Transaction( float amount, long walletSender, long walletReciever,String comment, LocalDateTime date) {
 		super();
 		this.amount = amount;
 		this.transactionDate = date;
 		this.walletSender = walletSender;
 		this.walletReciever = walletReciever;
+		this.comment=comment;
 		
 	}
 
@@ -45,6 +47,14 @@ public class Transaction implements Serializable {
 	 */
 
 	
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 	public Transaction(float amount, long walletSender, long walletReciever, LocalDateTime transactionDate,Status status ) {
 		super();

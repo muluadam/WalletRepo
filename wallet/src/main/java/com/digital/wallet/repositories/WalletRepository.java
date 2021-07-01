@@ -12,7 +12,7 @@ public interface WalletRepository extends CrudRepository<Wallet, Long> {
 	Wallet findById(long to);
 
 	
-	Wallet findByTag(String toTag);
+	Wallet findByTag(long toTag);
 	
 //    @Query("SELECT w FROM Wallet  w WHERE w.walletId=:walletId")
 //    Iterable<Wallet> findWalletById(@Param("walletId") Integer walletId);
